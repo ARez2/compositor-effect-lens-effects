@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/4b85c20f-77c4-4c02-ab2d-8fb3a525c3bd
 
 
 ## Usage
-1. Download/ clone the `lens_effects` folder into your projects `res://addons/` folder
+1. Download the `lens_effects` folder into your projects `res://addons/` folder
 2. Create or select a `WorldEnvironment` node
 3. Under `Compositor`, create a new `Compositor` and add 1 slot to the effects array
 4. Select the empty slot and create a new `LensFlareEffect` (it should show up for you even without activating the plugin)
