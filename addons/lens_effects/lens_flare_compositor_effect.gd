@@ -14,6 +14,8 @@ var sun_position = Vector2():
 	set(v):
 		sun_position = v
 		settings_dirty = true
+## 1.0 if looking at the sun, -1.0 else. Usually gets set by code.
+var sun_dir_sign := 1.0
 ## Color of the sun, lens flares and god rays. Use the alpha to control strength
 @export var sun_color = Color(0.61, 0.492, 0.93):
 	set(v):
@@ -176,6 +178,7 @@ func get_global_uniform_data() -> Array:
 		sun_color, # vec4
 		pos.x,
 		pos.y,
+		sun_dir_sign,
 		Anamorphic_Threshold,
 		Anamorphic_Intensity,
 		Anamorphic_Stretch,

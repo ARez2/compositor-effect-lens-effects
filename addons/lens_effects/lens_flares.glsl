@@ -18,6 +18,12 @@ float getSun(vec2 uv) {
     return length(uv) < 0.009 ? 1.0 : 0.0;
 }
 
+vec3 desaturate(vec3 color, float factor) {
+    vec3 lum = vec3(0.299, 0.587, 0.114);
+    vec3 gray = vec3(dot(lum, color));
+    return mix(color, gray, factor);
+}
+
 // from: https://www.shadertoy.com/view/XdfXRX
 void lensflares(vec2 uv, vec2 pos, out vec3 sunflare, out vec3 lensflare) {
     vec2 main = uv - pos;
@@ -60,6 +66,18 @@ void lensflares(vec2 uv, vec2 pos, out vec3 sunflare, out vec3 lensflare) {
     sunflare = vec3(f0);
     lensflare =
         vec3(f2 + f4 + f5 + f6, f22 + f42 + f52 + f62, f23 + f43 + f53 + f63);
+
+    // seems to already be completely white
+    sunflare = desaturate(sunflare, 1.0);
+
+    // Problem: Lens flare has yellow tint
+    // Solution desaturate
+    //lensflare = desaturate(lensflare, 1.0);
+    // Problem: Now chromatic abberation effect is gone
+    // Solution: Desaturate only yellow amount
+    float yellow = min(lensflare.r, lensflare.g); // amount of yellow
+    lensflare.r -= yellow * 0.5;
+    lensflare.g -= yellow * 0.5;
 }
 
 vec3 anflares(vec2 uv, float threshold, float intensity, float stretch,
@@ -124,43 +142,39 @@ void main() {
 
     // ========== God rays ==========
     float godrays = 0.0;
-    if (sun_color.a > 0.1) {
-        // Shadertoy used for the radial blur: https://www.shadertoy.com/view/XsKGRW
-        vec2 godot_uv = vec2(image_coord) / resolution;
-        vec2 sun_pos_uv = sun_position / resolution;
+    // Shadertoy used for the radial blur: https://www.shadertoy.com/view/XsKGRW
+    vec2 godot_uv = vec2(image_coord) / resolution;
+    vec2 sun_pos_uv = sun_position / resolution;
 
-        // Radial blur factors.
-        // Falloff, as we radiate outwards.
-        float decay = datablock.data.decay;
-        // Controls the sample density, which in turn, controls the sample spread.
-        float density = datablock.data.density;
-        // Sample weight. Decays as we radiate outwards.
-        float weight = datablock.data.weight;
-        int sample_count = int(datablock.data.sample_count);
+    // Radial blur factors.
+    // Falloff, as we radiate outwards.
+    float decay = datablock.data.decay;
+    // Controls the sample density, which in turn, controls the sample spread.
+    float density = datablock.data.density;
+    // Sample weight. Decays as we radiate outwards.
+    float weight = datablock.data.weight;
+    int sample_count = int(datablock.data.sample_count);
 
-        // Vector from sun_position to UV
-        vec2 ray_dir = godot_uv - sun_pos_uv;
-        vec2 ray_step = ray_dir * density / float(sample_count);
+    // Vector from sun_position to UV
+    vec2 ray_dir = (godot_uv - sun_pos_uv) * datablock.data.dir_mult;
+    vec2 ray_step = ray_dir * density / float(sample_count);
 
-        vec2 ray_uv_pos = godot_uv;
-        // Jitter the initial position a bit to blend the radial blur steps from the loop
-        ray_uv_pos += ray_step * (hash(godot_uv + fract(scene.data.time)) * 2.0 - 1.0);
-        float ray_sum = 0.0;
-        for (int i = 0; i < int(sample_count); i++) {
-            ray_uv_pos -= ray_step;
-            highp float raw_depth = texture(depth_sampler, ray_uv_pos).r;
-            ray_sum += float(int(ceil(raw_depth))) * weight;
-            weight *= decay;
-        }
-        ray_sum /= float(sample_count);
-        // Try to normalize the god rays a bit
-        ray_sum = clamp(ray_sum / 0.05, 0.0, 1.0);
-
-        godrays = pow(1.0 - ray_sum, 2.0) * sun_color.a;
-        godrays = clamp(godrays, 0.0, 1.0);
-        // imageStore(color_image, image_coord, vec4(1.0, 0.0, 0.0, 1.0));
-        // return;
+    vec2 ray_uv_pos = godot_uv;
+    // Jitter the initial position a bit to blend the radial blur steps from the loop
+    ray_uv_pos += ray_step * (hash(godot_uv + fract(scene.data.time)) * 2.0 - 1.0);
+    float ray_sum = 0.0;
+    for (int i = 0; i < int(sample_count); i++) {
+        ray_uv_pos -= ray_step;
+        highp float raw_depth = texture(depth_sampler, ray_uv_pos).r;
+        ray_sum += float(int(ceil(raw_depth))) * weight;
+        weight *= decay;
     }
+    ray_sum /= float(sample_count);
+    // Try to normalize the god rays a bit
+    ray_sum = clamp(ray_sum / 0.05, 0.0, 1.0);
+
+    godrays = pow(1.0 - ray_sum, 2.0);
+    godrays = clamp(godrays, 0.0, 1.0);
 
     // ========== Flares ==========
     vec3 sunflare = vec3(0.0);
@@ -168,6 +182,10 @@ void main() {
 
     // Sets sunflare and lensflare
     lensflares(uv * 1.5, mouse * 1.5, sunflare, lensflare);
+
+    // add a slight "always on" lens flare
+    float always_on_strength = 0.04;
+    lensflare = max(lensflare, sun_color.rgb * mix(0.02, always_on_strength, 1.0 - abs(datablock.data.dir_mult)));
 
     #ifdef CHEAP_FLARE
     vec3 anflare = pow(anflares2(uv - mouse, datablock.data.anamorphic_intensity, datablock.data.anamorphic_stretch, datablock.data.anamorphic_brightness), vec3(4.0));
@@ -195,15 +213,34 @@ void main() {
     occlusion = (sun_middle_occlusion + sun_depth) / 9.0; // 1 if unoccluded, 0 if blocked
     #endif
 
+    // When not facing the sun, still show some sun effects, but not 100%
+    //     invert dir_mult, clamp it >0
+    float occl_weight = max(-datablock.data.dir_mult, 0.0);
+    //     if facing opposite of sun -> occlusion = 0.25
+    //     If facing perp. to sun -> occlusion = occlusion
+    occlusion = mix(occlusion, 0.25, occl_weight);
+    if (datablock.data.dir_mult <= 0.0) {
+        sun_middle_occlusion = 1.0;
+        occlusion = 1.0;
+    }
+
     // Only show the white sun circle if the middle pixel isnt occluded
     vec3 sun = vec3(getSun(uv - mouse) * sun_middle_occlusion);
+    // add together the two effects of the sun disk
     sun += sunflare + anflare;
+    // dont show the sun if its behind the camera
+    float sun_mult = max(datablock.data.dir_mult, 0.0);
+    sun *= sun_mult;
+    // Put it all together and color it
     vec3 col = (sun + lensflare) * sun_color.rgb * occlusion;
 
     col = 1.0 - exp(-datablock.data.effect_easing * col);
+    col *= datablock.data.effect_multiplier;
 
-    vec3 final_sun_flare_col = col * sun_color.a * datablock.data.effect_multiplier;
-    vec3 new_rgb = final_sun_flare_col;
-    vec4 new_color = vec4(clamp((previous_color.rgb + new_rgb * godrays), vec3(0.0), vec3(1.0)), 1.0);
+    // apply godray mask
+    col *= godrays;
+
+    vec4 new_color = vec4(clamp((previous_color.rgb + col), vec3(0.0), vec3(1.0)), 1.0);
     imageStore(color_image, image_coord, new_color);
+    //imageStore(color_image, image_coord, vec4(lensflare, 1.0));
 }

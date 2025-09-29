@@ -2,6 +2,7 @@ struct EffectData {
     vec4 sun_color;
     highp float sun_position_x;
     highp float sun_position_y;
+    highp float dir_mult; // 1 if looking towards the sun, -1 else
     highp float anamorphic_treshold;
     highp float anamorphic_intensity;
     highp float anamorphic_stretch;
