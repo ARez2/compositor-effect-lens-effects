@@ -1,5 +1,5 @@
 # Godot 4 compositor lens effects 🌤️
-Lens flares and god rays implemented in a Godot 4 compositor effect. Tested with a recent custom build of the engine (`v4.5.beta.double.custom_build [12dbc6681]`)
+Lens flares and god rays implemented in a Godot 4 compositor effect. Tested with a recent custom build of the engine (`v4.6.dev.double.custom_build [0d529bc28]`)
 
 ---
 
