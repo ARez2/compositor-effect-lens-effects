@@ -183,10 +183,6 @@ void main() {
     // Sets sunflare and lensflare
     lensflares(uv * 1.5, mouse * 1.5, sunflare, lensflare);
 
-    // add a slight "always on" lens flare
-    float always_on_strength = 0.04;
-    lensflare = max(lensflare, sun_color.rgb * mix(0.02, always_on_strength, 1.0 - abs(datablock.data.dir_mult)));
-
     #ifdef CHEAP_FLARE
     vec3 anflare = pow(anflares2(uv - mouse, datablock.data.anamorphic_intensity, datablock.data.anamorphic_stretch, datablock.data.anamorphic_brightness), vec3(4.0));
     anflare += smoothstep(0.0025, 1.0, anflare) * 10.0;
@@ -221,7 +217,6 @@ void main() {
     occlusion = mix(occlusion, 0.25, occl_weight);
     if (datablock.data.dir_mult <= 0.0) {
         sun_middle_occlusion = 1.0;
-        occlusion = 1.0;
     }
 
     // Only show the white sun circle if the middle pixel isnt occluded
@@ -230,9 +225,14 @@ void main() {
     sun += sunflare + anflare;
     // dont show the sun if its behind the camera
     float sun_mult = max(datablock.data.dir_mult, 0.0);
-    sun *= sun_mult;
+
+    // add a slight "always on" lens flare
+    float always_on_strength = 0.04;
+    float always_on_weight = 1.0 - ((datablock.data.dir_mult + 1.0) * 0.5);
+    vec3 always_on_flare = sun_color.rgb * mix(0.02, always_on_strength, pow(always_on_weight, 0.1));
+
     // Put it all together and color it
-    vec3 col = (sun + lensflare) * sun_color.rgb * occlusion;
+    vec3 col = ((sun + lensflare) * sun_mult * occlusion + always_on_flare) * sun_color.rgb;
 
     col = 1.0 - exp(-datablock.data.effect_easing * col);
     col *= datablock.data.effect_multiplier;
@@ -242,5 +242,4 @@ void main() {
 
     vec4 new_color = vec4(clamp((previous_color.rgb + col), vec3(0.0), vec3(1.0)), 1.0);
     imageStore(color_image, image_coord, new_color);
-    //imageStore(color_image, image_coord, vec4(lensflare, 1.0));
 }
