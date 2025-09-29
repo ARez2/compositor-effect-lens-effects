@@ -15,7 +15,8 @@ Here are some screenshots of the editor viewport (because compositor effects jus
 
 And here's a video (also just a recording of the viewport, sorry for the quality):
 
-https://github.com/user-attachments/assets/4b85c20f-77c4-4c02-ab2d-8fb3a525c3bd
+https://github.com/user-attachments/assets/9afded05-fc36-4b94-bdd1-1c783292b4f2
+
 
 
 
