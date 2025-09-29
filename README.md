@@ -9,6 +9,9 @@ Here are some screenshots of the editor viewport (because compositor effects jus
 ![screenshot1](media/screenshot1.png)
 ![screenshot2](media/screenshot2.png)
 ![screenshot3](media/screenshot3.png)
+![screenshot3](media/screenshot4.png)
+![screenshot3](media/screenshot5.png)
+![screenshot3](media/screenshot6.png)
 
 And here's a video (also just a recording of the viewport, sorry for the quality):
 
@@ -27,6 +30,11 @@ https://github.com/user-attachments/assets/4b85c20f-77c4-4c02-ab2d-8fb3a525c3bd
 I have tried to add some comments here and there and also hover descriptions for the parameters of the effect. Hopefully that helps.
 
 **Note:** If you make changes to the GLSL shader file, the easiest way to reload the changes that I found is to click "Scene - Reload Saved Scene".
+
+### Tips
+- I have added hover descriptions to most settings of the effect, so feel free to use those
+- To adjust how visible the rays are, the `weight` setting is useful
+- If the rays look too noisy for your liking, adjust the `sample` setting (you can try `50, 100, 200, ...`)
 
 
 ## Thanks to
