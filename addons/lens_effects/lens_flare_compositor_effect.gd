@@ -17,7 +17,7 @@ var sun_position = Vector2():
 ## 1.0 if looking at the sun, -1.0 else. Usually gets set by code.
 var sun_dir_sign := 1.0
 ## Color of the sun, lens flares and god rays. Use the alpha to control strength
-@export var sun_color = Color(0.61, 0.492, 0.93):
+@export var sun_color = Color("423563"):
 	set(v):
 		sun_color = v
 		settings_dirty = true
