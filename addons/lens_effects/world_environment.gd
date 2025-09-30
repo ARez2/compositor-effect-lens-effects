@@ -17,7 +17,6 @@ func _process(_delta: float) -> void:
 		return
 	
 	var dir_dot := (-camera.global_transform.basis.z).normalized().dot(sun.global_transform.basis.z.normalized())
-	compositor.compositor_effects[0].sun_color.a = clampf(dir_dot, 0.001, 1.0)
 	compositor.compositor_effects[0].sun_position = camera.unproject_position(sun.global_transform.basis.z * maxf(camera.near, 1.0) + camera.global_position)
 	
 	compositor.compositor_effects[0].sun_dir_sign = dir_dot
