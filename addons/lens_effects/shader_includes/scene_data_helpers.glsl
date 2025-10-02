@@ -1,3 +1,6 @@
+#define MAX_VIEWS 2
+#include "godot/scene_data_inc.glsl"
+
 // Set 0: Scene
 layout(set = 0, binding = 0, std140) uniform SceneDataBlock {
     SceneData data;
