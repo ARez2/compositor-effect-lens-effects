@@ -240,6 +240,6 @@ void main() {
     // apply godray mask
     col *= godrays;
 
-    vec4 new_color = vec4(clamp((previous_color.rgb + col), vec3(0.0), vec3(1.0)), 1.0);
+    vec4 new_color = vec4(previous_color.rgb + col, previous_color.a);
     imageStore(color_image, image_coord, new_color);
 }
