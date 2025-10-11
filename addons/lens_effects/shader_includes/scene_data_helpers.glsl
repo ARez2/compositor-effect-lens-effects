@@ -1,4 +1,6 @@
 #define MAX_VIEWS 2
+// ARez: Uncomment the next line if you build the engine using double precision
+//#define USE_DOUBLE_PRECISION
 #include "godot/scene_data_inc.glsl"
 
 // Set 0: Scene

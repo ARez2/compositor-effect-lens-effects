@@ -37,6 +37,12 @@ I have tried to add some comments here and there and also hover descriptions for
 - To adjust how visible the rays are, the `weight` setting is useful
 - If the rays look too noisy for your liking, adjust the `sample` setting (you can try `50, 100, 200, ...`)
 
+### Double precision
+If you build your engine with double precision (like I do for my project) then you should uncomment the line
+```
+#define USE_DOUBLE_PRECISION
+```
+inside of [addons/lens_effects/shader_includes/scene_data_helpers.glsl](addons/lens_effects/shader_includes/scene_data_helpers.glsl)
 
 ## Thanks to
 [pink-arcana](https://github.com/pink-arcana) for their amazing example project for compositor effects here:

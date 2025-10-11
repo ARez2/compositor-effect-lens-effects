@@ -72,7 +72,7 @@ void lensflares(vec2 uv, vec2 pos, out vec3 sunflare, out vec3 lensflare) {
 
     // Problem: Lens flare has yellow tint
     // Solution desaturate
-    //lensflare = desaturate(lensflare, 1.0);
+    // lensflare = desaturate(lensflare, 1.0);
     // Problem: Now chromatic abberation effect is gone
     // Solution: Desaturate only yellow amount
     float yellow = min(lensflare.r, lensflare.g); // amount of yellow
