@@ -47,6 +47,20 @@ If you build your engine with double precision (like I do for my project) then y
 ```
 inside of [addons/lens_effects/shader_includes/scene_data_helpers.glsl](addons/lens_effects/shader_includes/scene_data_helpers.glsl)
 
+## In case of any errors/ weird behaviour
+I am not sure why, but I have had strange problems before which I fixed without changing anything in the shader. I am guessing it's some issue with Godot but not sure.
+
+Try these steps:
+- select these two shader files
+  <br> <img width="223" height="73" alt="image" src="https://github.com/user-attachments/assets/3fa978a6-a214-4b92-9b4d-2b3e232b24ba" />
+- go to the "Import" tab
+- click "Reimport" - this will probably show an error, but you can ignore that popup since it just says the shader files arent valid (they dont need to be, since they are just included in the main file)
+- select the main `lens_flares.glsl` file and also reimport it the same way
+- now try "Scene" - "Reload Saved Scene"
+- (alternatively, try "Project" - "Reload Current Project")
+
+I hope that fixes some issues you might be having :) 
+
 ## Thanks to
 [pink-arcana](https://github.com/pink-arcana) for their amazing example project for compositor effects here:
 - https://github.com/pink-arcana/godot-distance-field-outlines
