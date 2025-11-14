@@ -123,7 +123,9 @@ func _render_view(p_view : int) -> void:
 		get_scene_data_ubo(),
 		get_color_image_uniform(p_view),
 		get_depth_sampler_uniform(p_view, nearest_sampler),
-		get_color_sampler_uniform(p_view, nearest_sampler)
+		# if we bind this, then the color image is used both as image and sampler which Godot doesnt like
+		# in dev builds.
+		# get_color_sampler_uniform(p_view, nearest_sampler)
 	]
 	var df_uniform_set : Array[RDUniform] = [effect_data_ubo_uniform]
 	

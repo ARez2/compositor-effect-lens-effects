@@ -13,7 +13,9 @@ layout(set = 0, binding = 0, std140) uniform SceneDataBlock {
 // writeonly/readonly params.
 layout(set = 0, binding = 2) uniform sampler2D depth_sampler;
 // layout(set = 0, binding = 3) uniform sampler2D normal_roughness_sampler;
-layout(set = 0, binding = 4) uniform sampler2D color_sampler;
+// if we bind this, then the color image is used both as image and sampler which Godot doesnt like
+// in dev builds.
+// layout(set = 0, binding = 4) uniform sampler2D color_sampler;
 
 highp float length_squared(vec2 v) {
     return pow(v.x, 2.0) + pow(v.y, 2.0);
