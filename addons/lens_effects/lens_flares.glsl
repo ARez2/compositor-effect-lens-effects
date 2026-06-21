@@ -132,10 +132,11 @@ void main() {
 
     vec2 resolution = floor(scene.data.viewport_size);
     vec2 uv = image_coord / resolution - 0.5;
-    vec2 sun_position = vec2(datablock.data.sun_position_x, datablock.data.sun_position_y);
+    vec2 sun_pos_norm = vec2(datablock.data.sun_position_x, datablock.data.sun_position_y);
+    vec2 sun_position = sun_pos_norm * resolution;
     vec4 sun_color = datablock.data.sun_color;
 
-    vec2 mouse = (sun_position / resolution) - vec2(0.5);
+    vec2 mouse = sun_pos_norm - vec2(0.5);
     mouse.x *= resolution.x / resolution.y;
     uv.x *= resolution.x / resolution.y;
 
@@ -143,7 +144,6 @@ void main() {
     float godrays = 0.0;
     // Shadertoy used for the radial blur: https://www.shadertoy.com/view/XsKGRW
     vec2 godot_uv = vec2(image_coord) / resolution;
-    vec2 sun_pos_uv = sun_position / resolution;
 
     // Radial blur factors.
     // Falloff, as we radiate outwards.
@@ -155,7 +155,7 @@ void main() {
     int sample_count = int(datablock.data.sample_count);
 
     // Vector from sun_position to UV
-    vec2 ray_dir = (godot_uv - sun_pos_uv) * datablock.data.dir_mult;
+    vec2 ray_dir = (godot_uv - sun_pos_norm) * datablock.data.dir_mult;
     vec2 ray_step = ray_dir * density / float(sample_count);
 
     vec2 ray_uv_pos = godot_uv;
