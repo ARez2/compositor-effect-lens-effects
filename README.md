@@ -1,9 +1,6 @@
 # Godot 4 compositor lens effects 🌤️
 Lens flares and god rays implemented in a Godot 4 compositor effect.
-Tested with
-- a recent custom build of the engine (`v4.6.dev.double.custom_build [0d529bc28]`)
-- Godot 4.6 dev2
-- Godot 4.5(.1) RC2
+Should work with Godot **4.4+**. If not, please open an issue :)
 
 ---
 
@@ -34,6 +31,8 @@ https://github.com/user-attachments/assets/9afded05-fc36-4b94-bdd1-1c783292b4f2
 7. Tweak some values in the `LensFlareEffect` and enjoy :)
 
 I have tried to add some comments here and there and also hover descriptions for the parameters of the effect. Hopefully that helps.
+
+Also check out the demo scene provided.
 
 **Note:** If you make changes to the GLSL shader file, the easiest way to reload the changes that I found is to click "Scene - Reload Saved Scene".
 
