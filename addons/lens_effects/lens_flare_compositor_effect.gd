@@ -17,7 +17,7 @@ var sun_position = Vector2():
 ## 1.0 if looking at the sun, -1.0 else. Usually gets set by code.
 var sun_dir_sign := 1.0
 ## Color of the sun, lens flares and god rays. Use the alpha to control strength
-@export var sun_color = Color("423563"):
+@export var sun_color = Color("635728"):
 	set(v):
 		sun_color = v
 		settings_dirty = true
@@ -64,12 +64,12 @@ var sun_dir_sign := 1.0
 		Density = v
 		settings_dirty = true
 ## Basically strength of the godray effect. The higher the darker the shadow cast by them.
-@export var Weight := 0.022:
+@export var Weight := 0.137:
 	set(v):
 		Weight = v
 		settings_dirty = true
 ## Very important setting. Controls how many radial blur samples are taken. Higher values increase the quality/ resolution of the god rays at the cost of performance. 
-@export_range(1, 1000, 1) var SampleCount := 15:
+@export_range(1, 1000, 1) var SampleCount := 64:
 	set(v):
 		SampleCount = v
 		settings_dirty = true
