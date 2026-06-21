@@ -30,7 +30,8 @@ https://github.com/user-attachments/assets/9afded05-fc36-4b94-bdd1-1c783292b4f2
 3. Under `Compositor`, create a new `Compositor` and add 1 slot to the effects array
 4. Select the empty slot and create a new `LensFlareEffect` (it should show up for you even without activating the plugin)
 5. Add the `world_environment.gd` script (also found in the `lens_effects` folder) to the WorldEnvironment node and assign the `sun` exported variable to point at your `DirectionalLight3D`
-6. Tweak some values in the `LensFlareEffect` and enjoy :)
+6. Reload the scene (via "Scene - Reload saved scene") to load the toolscript
+7. Tweak some values in the `LensFlareEffect` and enjoy :)
 
 I have tried to add some comments here and there and also hover descriptions for the parameters of the effect. Hopefully that helps.
 
