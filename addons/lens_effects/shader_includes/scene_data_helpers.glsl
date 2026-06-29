@@ -4,6 +4,7 @@
 #include "godot/scene_data_inc.glsl"
 
 // Set 0: Scene
+// For layout, see: https://github.com/godotengine/godot/blob/master/servers/rendering/renderer_rd/shaders/scene_data_inc.glsl
 layout(set = 0, binding = 0, std140) uniform SceneDataBlock {
     SceneData data;
     SceneData prev_data;
