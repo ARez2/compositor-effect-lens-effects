@@ -8,27 +8,25 @@ extends WorldEnvironment
 		if v != sun:
 			sun = v
 			update_configuration_warnings()
-var camera: Camera3D
 var compositor_effect: CompositorEffect
 
 func _ready() -> void:
-	if Engine.is_editor_hint():
-		camera = EditorInterface.get_editor_viewport_3d().get_camera_3d()
-	else:
-		camera = get_viewport().get_camera_3d()
-	
 	for effect in compositor.compositor_effects:
 		if effect is LensFlareEffect:
 			compositor_effect = effect
 			break
-	
-	if !camera:
-		push_error("No camera has been found in the scene. You need at least 1 camera in order for the lens effect to work!")
+
 	if !compositor_effect:
 		push_error("No LensFlareEffect was found in the compositor effects array on the WorldEnvironment node!")
 
 
 func _process(_delta: float) -> void:
+	var camera: Camera3D
+	if Engine.is_editor_hint():
+		camera = EditorInterface.get_editor_viewport_3d().get_camera_3d()
+	else:
+		camera = get_viewport().get_camera_3d()
+
 	if !sun or !camera or !compositor_effect:
 		return
 	
