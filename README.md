@@ -3,6 +3,12 @@ Lens flares and god rays implemented in a Godot 4 compositor effect.
 
 Should work with Godot **4.4+**. If not, please open an issue :)
 
+It is also available on the new Godot Asset Store for free:
+https://store.godotengine.org/asset/arez/compositor-lens-flare-godrays/
+
+And therefore it is also available inside the engine itself!
+If you use the shader and enjoy it, I would also appreciate a like on the asset store :)
+
 ---
 
 Compositor effects are really cool. They allow you to hook into the rendering pipeline of Godot and write some nice low level shader code, while optionally having access to the shader data that Godot itself uses (see [scene_data.glsl](addons/lens_effects/shader_includes/scene_data.glsl)) and whatever else you want.
